@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xml>
+    <execute name="banggoodAd">
+        <node alias="campaign"/>
+        <node alias="adset"/>
+        <node alias="creative"/>
+        <!--<node alias="targeting"/>-->
+    </execute>
+</xml>

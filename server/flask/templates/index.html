@@ -1,0 +1,45 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+
+{{ super() }}
+
+{% if current_user.is_authenticated %}
+
+
+
+
+
+
+
+欢迎来到后台管理系统！
+
+{% else %}
+
+{{ form.hidden_tag() if form.hidden_tag }}
+
+{% for f in form if f.type != 'CSRFTokenField' %}
+
+{{ f.label }}
+
+{{ f }}
+
+{% if f.errors %}
+
+{% for e in f.errors %}
+
+{{ e }}
+
+{% endfor %}
+
+{% endif %}
+
+{% endfor %}
+
+登陆
+
+{{ link | safe }}
+
+{% endif %}
+
+{% endblock body %}

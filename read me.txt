@@ -1,0 +1,40 @@
+pip freeze > requirements.txt # 生成requirements.txt
+pip install -r requirements.txt # 从requirements.txt安装依赖
+
+python版本为3.5
+
+框架用到的第三方包
+ConcurrentLogHandler
+pip3.5 install ConcurrentLogHandler
+
+FlaskAPI
+pip3.5 install Flask-API,Flask-Login,Flask-SQLAlchemy
+
+gevent
+pip3.5 install gevent
+
+tornado
+pip3.5 install Tornado
+
+redis
+pip3.5 install redis
+
+requests
+pip3.5 install requests
+
+google标题优化需要的包
+pandas
+
+目录：
+    src：
+        1.  classLogMgr.py 在地方方包上做的项目个性化的日志模块
+        2.  flaskAPIServer.py 通信协议框架入口
+        3.  main.py 框架多进程管理
+        4.  taskRun.py 任务处理,业务流
+        5.  baseDataCenter.py 基础信息存储
+        6.  flaskIndexASpiDataConfig 配置api主页显示信息
+        7.  requestHandlerBase 业务处理流的父类，被requestHandlerMgr管理
+        8.  requestHandlerMgr 查找对应的处理请求进行处理
+        9.  requestRigister 注册处理函数到相应的url
+        10. serverMgr 外部控制服务器
+        11. log.config log的配置文件
