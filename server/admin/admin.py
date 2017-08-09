@@ -2,6 +2,8 @@
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
+from flask_cas import login_required
+from server.cas.cas import getCAS
 
 import os.path as op
 
@@ -9,7 +11,15 @@ class MyView(BaseView):
 
     #这里类似于app.route()，处理url请求
     @expose('/')
+    @login_required
     def index(self):
+        print('==========' * 4)
+        username = getCAS().username,
+        print(username)
+        display_name = getCAS().attributes['cas:displayName']
+        print(display_name)
+        print('==========' * 4)
+
         return self.render('index.html')
 
 class UserView(ModelView):

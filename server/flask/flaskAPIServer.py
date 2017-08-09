@@ -9,6 +9,7 @@ import businessModule
 import server.admin.admin
 import server.flask.ApiServerTornado
 import utilPackage.utilSql.utilSqlalchemy
+import server.cas.cas
 
 try:
     loggerInfo = logging.getLogger("infoLogger")
@@ -20,6 +21,7 @@ app = FlaskAPI(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = os.urandom(24)
 
+server.cas.cas.setApp(app=app)
 dbMgr = utilPackage.utilSql.utilSqlalchemy.getApp(app = app)
 apiServerAdmin = server.admin.admin.ApiServerAdmin(app, dbMgr)
 

@@ -7,3 +7,4 @@ DAEMON_PROCESS_DETECTION_TIME=2 #守护进程检测服务器进程状态的时�
 SERVER_STATS_DEBUG = False #服务器是否处于调试状态
 
 IS_HTTPS = True #是否开启https
+
