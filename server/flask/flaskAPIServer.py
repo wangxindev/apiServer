@@ -1,50 +1,54 @@
 #建议用tornado与gevent封装flask，以添加并发能力
 from flask_api import FlaskAPI, status, exceptions
 from flask import request, url_for
-import logging
 import os
 
+from flask_cas import login_required
+
 import server
-import businessModule
-import server.admin.admin
 import server.flask.ApiServerTornado
-import utilPackage.utilSql.utilSqlalchemy
-import server.cas.cas
+from app.app import getAppMgr
 
 try:
-    loggerInfo = logging.getLogger("infoLogger")
+    loggerInfo = getAppMgr().get('log')
 except:
+    import logging
     loggerInfo = logging.getLogger()
 
 app = FlaskAPI(__name__)
-
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SECRET_KEY'] = os.urandom(24)
-
-server.cas.cas.setApp(app=app)
-dbMgr = utilPackage.utilSql.utilSqlalchemy.getApp(app = app)
-apiServerAdmin = server.admin.admin.ApiServerAdmin(app, dbMgr)
+getAppMgr().insert('flaskApp',app)
 
 task_queue = None
+requestHandMgr = getAppMgr().get('RequestHandlerMgr')
 
-requestHandMgr = server.RequestHandlerMgr()
+class flaskApi(object):
 
-def flaskAPI_run(queue, flaskQueue, debug=False):
-    global task_queue
-    task_queue = queue
+    @staticmethod
+    def init():
+        app.config['SESSION_TYPE'] = 'filesystem'
+        app.config['SECRET_KEY'] = os.urandom(24)
 
-    #app.run(host='0.0.0.0',port=5000)
+        getAppMgr().get('sqlAlchemyDB').sqlDB_init()
+        getAppMgr().get('mycas').cas_init()
+        getAppMgr().get('ApiServerAdmin').init_Admin()
 
-    iPort = flaskQueue.get()
-    loggerInfo.info('启动服务器监听，监听端口：%s'%iPort)
-    server.flask.ApiServerTornado.setTornado(app, iPort)
+    @staticmethod
+    def run(queue, flaskQueue, debug=False):
+        flaskApi.init()
+        global task_queue
+        task_queue = queue
+
+        iPort = flaskQueue.get()
+        loggerInfo.info('启动服务器监听，监听端口：%s' % iPort)
+        server.flask.ApiServerTornado.setTornado(app, iPort)
 
 def push_queue(data):
     global task_queue
     task_queue.put(data)
+getAppMgr().insert('push_queue', push_queue)
 
-desc = businessModule.desc
-notes = businessModule.notes
+desc = getAppMgr().get('desc')
+notes = getAppMgr().get('notes')
 
 def note_repr(key):
     return {
@@ -55,11 +59,12 @@ def note_repr(key):
 #根目录下应该罗列所有接口的列表以及每个接口的说明
 @app.route("/", methods=['GET'])
 def notes_list():
-    # request.method == 'GET'
+    #request.method == 'GET'
     return [note_repr(idx) for idx in sorted(notes.keys())]
 
 
-@app.route("/ai/api/<string:key>/", methods=['POST', 'GET'])
+@app.route("/ai/api/<string:key>", methods=['POST', 'GET'])
+@login_required
 def notes_detail(key):
 
     loggerInfo.info("一个请求访问过来,key:" + key + " method:" + str(request.method) + " requst data:" + str(request.data) + "GET:" + str(request.args))

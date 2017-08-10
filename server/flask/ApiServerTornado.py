@@ -3,8 +3,10 @@ import os
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
-
 from server.config import parameters
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def setTornado(app, iPort):
     if parameters.IS_HTTPS:

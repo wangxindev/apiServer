@@ -3,7 +3,7 @@ from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_cas import login_required
-from server.cas.cas import getCAS
+from app.app import getAppMgr
 
 import os.path as op
 
@@ -14,13 +14,14 @@ class MyView(BaseView):
     @login_required
     def index(self):
         print('==========' * 4)
-        username = getCAS().username,
+        username = getAppMgr().get('cas').username,
         print(username)
-        display_name = getCAS().attributes['cas:displayName']
-        print(display_name)
+        # display_name = getCAS().attributes['cas:displayName']
+        # print(display_name)
         print('==========' * 4)
 
-        return self.render('index.html')
+        return 'hello'
+        # return self.render('index.html')
 
 class UserView(ModelView):
 
@@ -43,14 +44,18 @@ class UserView(ModelView):
 
 
 class ApiServerAdmin(object):
-    def __init__(self, app, dbMgr):
-
-        self.__app = app
-        self.__db = app.extensions['sqlalchemy'].db
-        self.__admin = Admin(app,template_mode='bootstrap3')
-        # self.__admin.add_view(MyView('my view'))
-        self.__admin.add_view(UserView(dbMgr.User,self.__db.session))
+    @staticmethod
+    def init_Admin():
+        app = getAppMgr().get('flaskApp')
+        db = getAppMgr().get('sqlAlchemyDB').getDB()
+        admin = Admin(app,template_mode='bootstrap3')
+        admin.add_view(MyView('my view'))
+        admin.add_view(UserView(getAppMgr().get('User'),db.session))
         path = op.join(op.dirname(__file__), 'static')
-        self.__admin.add_view(FileAdmin(path, '/static/', name='Static Files'))
+        admin.add_view(FileAdmin(path, '/static/', name='Static Files'))
+        getAppMgr().insert('admin', admin)
+
+getAppMgr().insert('ApiServerAdmin', ApiServerAdmin)
+
 
 

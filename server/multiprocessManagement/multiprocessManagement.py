@@ -1,21 +1,15 @@
 #标准模块
 import time
 import multiprocessing
-import logging
-import logging.config
-import os
-import sys
-import stat
-import argparse
+
+from app.app import getAppMgr
+
+from server.flask.flaskAPIServer import flaskApi
+
+loggerInfo = getAppMgr().get('log')
 
 #个人模块
-import server
 from server.config import parameters
-
-#加载log配置文件
-logPath = sys.path[0] + '/utilPackage/utilLog/log.config'
-logging.config.fileConfig(logPath)
-loggerInfo = logging.getLogger("infoLogger")
 
 class multiprocessManagementObj(object):
     def __init__(self):
@@ -31,8 +25,10 @@ class multiprocessManagementObj(object):
         loggerInfo.info('flaskAPI进程拉起成功')
         self.queue = queue
         self.flaskQueue = flaskQueue
+        getAppMgr().insert('flask-queue', queue)
+        getAppMgr().insert('flask-flaskQueue', flaskQueue)
         try:
-            server.flaskAPI_run(self.queue, self.flaskQueue,True)
+            flaskApi.run(self.queue, self.flaskQueue, True)
         except:
             loggerInfo.info('flaskAPI业务启动失败')
 
@@ -83,7 +79,7 @@ class multiprocessManagementObj(object):
             loggerInfo.debug("消息：" + str(data))
             loggerInfo.info("获取消息结束")
             loggerInfo.info("发送消息到具体业务处理方法")
-            self.pool.apply_async(server.taskQueue, (data,))
+            self.pool.apply_async(getAppMgr().get('taskQueue').run, (data,))
             loggerInfo.info("业务处理结束")
 
     #初始化任务管理队列进程
@@ -117,6 +113,8 @@ def run():
     multiprocessMgr.initFlaskServer()
     multiprocessMgr.initPorlServer()
     multiprocessMgr.start()
+
+getAppMgr().insert('multiprocessManagementRun', run)
 
 if __name__ == '__main__':
     run()

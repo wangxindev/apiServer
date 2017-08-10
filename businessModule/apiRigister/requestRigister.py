@@ -1,21 +1,25 @@
-# import src.RequestHandler.googleApiRequestHandler
-# import src.RequestHandler.adText
-#
-# def rigister(requestHandMgr):
-#     googleApi = src.RequestHandler.googleApiRequestHandler.GoogleApiRequestHandler()
-#     requestHandMgr.register(googleApi)
-#
-#     adTextApi = src.RequestHandler.adText.AdTextApiRequestHandler()
-#     requestHandMgr.register(adTextApi)
-
-
-import businessModule.business.test.test
 from businessModule.business.test.test import testRequestHandler
 from businessModule.business.adInfoComposing.adComposingApi import AdComposingApiRequestHandler
+from businessModule.business.admin.login import LoginApiRequestHandler
 
-def rigister(requestHandMgr):
-    testApi = testRequestHandler()
-    requestHandMgr.register(testApi)
+from app.app import getAppMgr
 
-    adApi = AdComposingApiRequestHandler()
-    requestHandMgr.register(adApi)
+class RequestRigister(object):
+
+    @staticmethod
+    def rigister():
+        testApi = testRequestHandler()
+        getAppMgr().get('RequestHandlerMgr').register(testApi)
+
+        adApi = AdComposingApiRequestHandler()
+        getAppMgr().get('RequestHandlerMgr').register(adApi)
+
+        loginApi = LoginApiRequestHandler()
+        getAppMgr().get('RequestHandlerMgr').register(loginApi)
+
+    @staticmethod
+    def init():
+        getAppMgr().insert('rigister', RequestRigister)
+
+
+RequestRigister.rigister()

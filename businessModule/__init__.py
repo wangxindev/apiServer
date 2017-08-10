@@ -1,3 +1,5 @@
-from businessModule.apiRigister.requestRigister import rigister
-from businessModule.apiRigister.flaskIndexApiDataConfig import desc, notes
+
+import businessModule.apiRigister
+
 from businessModule.business.adInfoComposing.getData import create_campaign_name
+

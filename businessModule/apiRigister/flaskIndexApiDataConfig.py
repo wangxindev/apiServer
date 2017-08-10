@@ -17,3 +17,8 @@ notes = {
     'test': 'test',
 	'adComposingApi':'广告组装api'
 }
+
+from app.app import getAppMgr
+
+getAppMgr().insert('desc', desc)
+getAppMgr().insert('notes', notes)

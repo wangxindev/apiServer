@@ -1,12 +1,13 @@
 import logging
 
 import server
+from app.app import getAppMgr
+
+class TaskQueue(object):
+    @staticmethod
+    def run(data):
+        getAppMgr().get('requestHandMgr').setTaskQueue(data)
+        getAppMgr().get('log').warning('data:' + str(data))
 
 
-loggerInfo = logging.getLogger("infoLogger")
-
-requestHandMgr = server.RequestHandlerMgr()
-
-def taskQueue(data):
-    requestHandMgr.setTaskQueue(data)
-    loggerInfo.warning('data:' + str(data))
+getAppMgr().insert('taskQueue', TaskQueue)

@@ -1,1 +1,7 @@
-from businessModule.apiRigister import flaskIndexApiDataConfig, requestRigister
+
+import businessModule.apiRigister.requestRigister
+from businessModule.apiRigister.requestRigister import RequestRigister
+RequestRigister.init()
+
+import businessModule.apiRigister.flaskIndexApiDataConfig
+

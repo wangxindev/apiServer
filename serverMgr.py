@@ -3,9 +3,11 @@ import os
 import argparse
 import sys
 
-
+import utilPackage
+import businessModule
 import server
 
+from app.app import getAppMgr
 
 parser = argparse.ArgumentParser(description="广告系统系统参数帮助")
 parser.add_argument("-s", "--stop", help="停止广告服务器", action="store_true")
@@ -32,6 +34,6 @@ if args.echo:
     print('-'*50)
 
 if __name__ == '__main__':
-    server.run()
+    getAppMgr().get('multiprocessManagementRun')()
 
 

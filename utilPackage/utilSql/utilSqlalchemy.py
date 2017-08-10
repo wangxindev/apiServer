@@ -1,23 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 
-class appMgr(object):
-    def __init__(self, app):
-        self.app = app
+from app.app import getAppMgr
 
-app_mgr = appMgr(None)
 db = SQLAlchemy(None)
 
-def getApp(app):
-    app_mgr.app = app
-    app_mgr.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Volumes/work/3.code/APIServer/tmp/test.db'
-    db.init_app(app)
-    return DBMgr(db)
-
-class DBMgr(object):
-    def __init__(self, db):
-        self.db = db
-        # self.user = User('admin', 'admin@admin.com')
-        self.User = User
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +17,19 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+class sqlAlchemyDB(object):
+    @staticmethod
+    def sqlDB_init():
+        app = getAppMgr().get('flaskApp')
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Volumes/work/3.code/APIServer/tmp/test.db'
+        db.init_app(app)
+
+    @staticmethod
+    def getDB():
+        return db
+
+getAppMgr().insert('User',User)
+getAppMgr().insert('sqlAlchemyDB', sqlAlchemyDB)
 
 
 '''

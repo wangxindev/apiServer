@@ -1,1 +1,1 @@
-from server.multiprocessManagement.multiprocessManagement import run
+import server.multiprocessManagement.multiprocessManagement
