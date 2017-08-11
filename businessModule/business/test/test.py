@@ -14,6 +14,7 @@ class testRequestHandler(RequestHandlerBase):
                 loggerInfo.warning("get data:" + str(request.data))
                 return {"Message": "接收到数据", "Code": 0, "Succeed": True, 'V': 1.0, "data": request.data}
             else:
+                print("离线任务")
                 RequestHandlerBase.pushData(self, "hahahaha")
                 return {"Message": "请传递Title数据 我是丁磊", "Code": 0, "Succeed": False, 'V': 1.0}
         else:

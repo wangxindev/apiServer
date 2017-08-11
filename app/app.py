@@ -1,4 +1,10 @@
 #
+import sys
+import logging.config
+logPath = sys.path[0] + '/utilPackage/utilLog/log.config'
+logging.config.fileConfig(logPath)
+loggerInfo = logging.getLogger('loggerInfo')
+
 def Singleton(cls):
     _instance = {}
     def _singleton(*args, **kargs):
@@ -23,7 +29,7 @@ class AppMgr(object):
         if key in self.__values.keys():
             raise NameError('key exist')
 
-        print('------> app insert %s'%key)
+        loggerInfo.info('------> app insert %s'%key)
         self.__values[key] = value
 
     def get(self, key):
@@ -46,9 +52,5 @@ appMgr = AppMgr()
 def getAppMgr():
     return appMgr
 
-import sys
-import logging.config
-logPath = sys.path[0] + '/utilPackage/utilLog/log.config'
-logging.config.fileConfig(logPath)
-loggerInfo = logging.getLogger('loggerInfo')
+
 getAppMgr().insert('log',loggerInfo)
