@@ -49,7 +49,7 @@ def parseNode(nodeChild, adMapMgr, dataCenter):
             if not b:
                 return b, tempValue
             if tempValue != None:
-                tempMap[node.name] = node.value
+                tempMap[node.name] = tempValue
         adMapMgr.addAdInfo(aliasNode.name, tempMap)
 
     return b,'ok'
@@ -69,7 +69,3 @@ def parseXmlAndGetAdInfo(sku, domain, userData={}):
         return b, adMap.getAdInfo()
     else:
         return b , error
-
-# print('='*30)
-# print(parseXmlAndGetAdInfo('sku88888888', '0',{}))
-# print('='*30)

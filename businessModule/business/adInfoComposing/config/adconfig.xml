@@ -43,7 +43,8 @@
     </module>
 
     <module name="ad">
-        <node name="adName" enable="on" type="string" default="adName"/>
+        <node name="ad_name" enable="on" type="string" default="adName"/>
+        <node name="status" enable="on" type="string" default="ACTIVE"/>
         <node name="optimization_goal" enable="on" type="string" default="OFFSITE_CONVERSIONS"/>
         <node name="type" enable="on" type="string" default="slideshow"/>
         <node name="see_more_link" enable="on" type="string" default="learn_more"/>

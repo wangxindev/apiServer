@@ -1,5 +1,6 @@
 from app.app import getAppMgr
 from businessModule.business.adInfoComposing.createADInfoByParseXml import parseXmlAndGetAdInfo
+from businessModule.business.adInfoComposing.advertisingRelease import AdvertisingRelease
 
 loggerInfo = getAppMgr().get('log')
 RequestHandlerBase = getAppMgr().get('RequestHandlerBase')
@@ -25,4 +26,5 @@ class AdComposingApiRequestHandler(RequestHandlerBase):
             return {"Message": "请传递正确的json数据", "Code": 0, "Succeed": False, 'V': 1.0}
 
     def taskQueue(self, data):
-        print("hahahah 我处理了这个离线任务 data=%s"%str(data))
+        advertisingRelease = AdvertisingRelease()
+        advertisingRelease.getAdInfo(data)
