@@ -3,7 +3,8 @@
     <execute name="banggoodAd">
         <node alias="campaign"/>
         <node alias="adset"/>
+        <node alias="targeting"/>
+        <node alias="ad"/>
         <node alias="creative"/>
-        <!--<node alias="targeting"/>-->
     </execute>
 </xml>

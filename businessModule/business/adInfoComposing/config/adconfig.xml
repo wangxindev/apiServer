@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xml>
 
+    <module name="targeting"
+            importPackageName='businessModule.business.adInfoComposing.getData.create_targeting'
+            func="create_targeting"
+            type="array"/>
+
+    <module name="creative"
+            importPackageName='businessModule.business.adInfoComposing.getData.create_creative'
+            func="create_creative"
+            type="object"/>
+
     <module name="campaign">
-        <node name="account_id" type="string" default=""/>
-        <node name="status" type="string" default="SINGLE_IMAGE"/>
-        <node name="dc_id" type="string" default=""/>
+        <node name="account_id" type="string" default="未定"/>
+        <node name="status" type="string" default="PAUSED"/>
+        <node name="dc_id" type="string" default="未定"/>
         <node name="campaign_name"
               importPackageName='businessModule.business.adInfoComposing.getData.create_campaign_name'
               func="create_campaign_name"
@@ -13,7 +23,7 @@
     </module>
 
     <module name="adset">
-        <node name="optimization_goal" enable="on" type="string" default="optimization_goal"/>
+        <node name="optimization_goal" enable="on" type="string" default="OFFSITE_CONVERSIONS"/>
         <node name="billing_event" enable="on" type="string" default="IMPRESSIONS"/>
         <node name="promoted_object" enable="on" type="object" default="{ 'custom_event_type': 'PURCHASE' }"/>
         <node name="daily_budget" enable="on" type="int" default="30"/>
@@ -21,7 +31,7 @@
         <node name="attribution_window_days" enable="on" type="int" default="7"/>
         <node name="status" enable="on" type="string" default="ACTIVE"/>
         <node name="attribution_spec" enable="on" type="array" default="[ { ' event_type': 'CLICK_THROUGH', 'window_days': 7 } ]"/>
-        <node name="adsetName" enable="on" type="string" default="name"/>
+        <node name="adsetName" enable="on" type="string" default="adsetName"/>
 
         <node name="bid_amount" enable="off" type="int" default="100"/>
         <node name="lifetime_budget" enable="off" type="int" default="10000"/>
@@ -29,49 +39,19 @@
         <node name="end_time" enable="off" type="string" default="datetime(xxxx-xx-xx xx:xx:xx)"/>
         <node name="adset_schedule" enable="off" type="array" default="['adset_schedule']"/>
         <node name="pacing_type" enable="off" type="string" default="pacing_type"/>
-        <node name="targeting" enable="off" type="array" default="['targeting']"/>
-        <node name="ads" enable="off" type="array" default="['ads']"/>
-        <node name="custom_event_type" enable="off" type="string" default="COMPLETE_REGISTRATION"/>
+        <node name="custom_event_type" enable="off" type="string" default="PURCHASE"/>
     </module>
 
-    <module name="creative">
-        <node name="adName" enable="on" type="string" default=""/>
-        <node name="optimization_goal" enable="on" type="string" default="optimization_goal"/>
+    <module name="ad">
+        <node name="adName" enable="on" type="string" default="adName"/>
+        <node name="optimization_goal" enable="on" type="string" default="OFFSITE_CONVERSIONS"/>
         <node name="type" enable="on" type="string" default="slideshow"/>
-        <node name="images" enable="on" type="array" default="[]"/>
-        <node name="image_headline" enable="on" type="string" default=""/>
-        <node name="image_link" enable="on" type="string" default=""/>
-        <node name="image_desc" enable="on" type="string" default=""/>
-        <node name="text" enable="on" type="string" default=""/>
         <node name="see_more_link" enable="on" type="string" default="learn_more"/>
-        <node name="call_to_action_type" enable="on" type="string" default=""/>
+        <node name="call_to_action_type" enable="on" type="string" default="shop now"/>
         <node name="display_link" enable="on" type="string" default=""/>
         <node name="slideshow_aspect_radio" enable="on" type="string" default="original"/>
-        <node name="slideshow_duration" enable="on" type="int" default="1000"/>
+        <node name="slideshow_duration" enable="on" type="int" default="1"/>
         <node name="slideshow_transition" enable="on" type="string" default="none"/>
     </module>
-
-    <!--<module name="targeting">-->
-        <!--<node name="genders" enable="on" type="array" default="['genders']"/>-->
-        <!--<node name="age_min" enable="on" type="int" default="20"/>-->
-        <!--<node name="age_max" enable="on" type="int" default="40"/>-->
-        <!--<node name="geo_locations" enable="on" type="array" default="['geo_locations']"/>-->
-        <!--<node name="excluded_geo_locations" enable="on" type="array" default="['excluded_geo_locations']"/>-->
-        <!--<node name="device_platforms" enable="on" type="array" default="['mobile', 'desktop']"/>-->
-        <!--<node name="publisher_platforms" enable="on" type="array" default="['facebook', 'instagram', 'audience_network']"/>-->
-        <!--<node name="facebook_positions" enable="on" type="array" default="['feed','right_hand_column','instant_article']"/>-->
-        <!--<node name="user_os" enable="on" type="array" default="['iOS', 'Android']"/>-->
-        <!--<node name="user_device" enable="on" type="array" default="['user_device']"/>-->
-        <!--<node name="excluded_user_device" enable="on" type="array" default="['excluded_user_device']"/>-->
-        <!--<node name="wireless_carrier" enable="on" type="array" default="['wifi']"/>-->
-        <!--<node name="excluded_publisher_categories" enable="on" type="array" default="['Religion','Politics']"/>-->
-        <!--<node name="excluded_publisher_list_ids" enable="on" type="array" default="['block_list_id_1','block_list_id_2']"/>-->
-        <!--<node name="custom_audiences" enable="on" type="array" default="[ ['id','6032440233264','name','test'],['id','6032440233264','name','cpc_all'] ]"/>-->
-        <!--<node name="excluded_custom_audiences" enable="on" type="array" default="[ ['id','6032440233264','name','test'],['id','6032440233264','name','cpc_all'] ]"/>-->
-        <!--<node name="locales" enable="on" type="array" default="[1,5]"/>-->
-        <!--<node name="targeting_optimization" enable="on" type="string" default="NONE"/>-->
-        <!--<node name="flexible_spec" enable="on" type="array" default="['flexible_spec','flexible_spec']"/>-->
-        <!--<node name="exclusions" enable="on" type="array" default="['exclusions','exclusions']"/>-->
-    <!--</module>-->
 
 </xml>

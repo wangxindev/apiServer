@@ -49,21 +49,22 @@ class AttBase(object):
     def value(self):
         # 如果配置属性为off表示此节点不可用，直接返回None
         if self.enable == 'off':
-            return None
+            return True ,None
 
         if self._value != None:
-            return self._value
+            return True, self._value
 
         #如果func 和 importPackageName 不为None 说明通过此方法获取属性值
+        b = True
         if self.func != None:
             if self.importPackageName != None:
                 exec("import " + str(self.importPackageName))
-                exec("self._value = " + str(self.importPackageName) + "." + str(self.func) + "(self.otherInfo)")
+                exec("b,self._value = " + str(self.importPackageName) + "." + str(self.func) + "(self.otherInfo)")
 
         if self._value==None and self.default!=None:
             self._value = self.default
 
-        return self._value
+        return b, self._value
 
     @value.setter
     def value(self, value):
