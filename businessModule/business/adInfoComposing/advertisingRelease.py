@@ -154,7 +154,14 @@ class Creative(AdObj):
     def assemble(self):
         self.data['creative']['see_more_link'] = self.data['creative']['product_url']
         self.data['creative']['product_url'] = None
+        # print("create:" + str([self.data['creative']]))
         return [self.data['creative']]
+        # return [self.data['creative']['creative']]
+
+class Name(AdObj):
+    pass
+    # def assemble(self):
+    #     pass
 
 
 
@@ -165,6 +172,7 @@ class AdvertisingRelease(object):
         self.__targeting = Targeting()
         self.__ad = Ad()
         self.__creative = Creative()
+        self.__name = Name()
 
     def getAdInfo(self, adInfo):
         self.__campaign.init(adInfo['campaign'])
@@ -172,11 +180,14 @@ class AdvertisingRelease(object):
         self.__targeting.init(adInfo['targeting'])
         self.__ad.init(adInfo['ad'])
         self.__creative.init(adInfo['creative'])
+        self.__name.init(adInfo['name'])
 
         self.assembleAd()
 
     def assembleAd(self):
+
         assemble_ad = self.__campaign.assemble()
+        assemble_ad['campaign_name'] = self.__name.data['campaign_name']
         assemble_ad['adset'] = []
         adset_adset = self.__adSet.assemble()
         adset_Targeting_array = self.__targeting.assemble()
@@ -184,6 +195,7 @@ class AdvertisingRelease(object):
             adset_iter = adset_adset
             assemble_ad['adset'].append(adset_iter)
             adset_iter["targeting"] = adset_targeting
+            adset_iter['name'] = self.__name.data['adset_name']
             adset_iter['ads']=[]
             creative_array = self.__creative.assemble()
             creative_image_link_array = []
@@ -198,11 +210,10 @@ class AdvertisingRelease(object):
                 ad_tmp['creative']['slideshow_duration'] = ad['slideshow_duration']
                 ad_tmp['creative']['slideshow_transition'] = ad['slideshow_transition']
                 creative_image_link_array.append(creative['see_more_link'])
-                ad_tmp['ad_name'] = ad['ad_name']
+                ad_tmp['ad_name'] = self.__name.data['ad_name']
                 ad_tmp['status'] = ad['status']
 
         print(self.sendAd(assemble_ad))
-
 
     def sendAd(self, ad):
         return True, '广告发布'+str(ad)

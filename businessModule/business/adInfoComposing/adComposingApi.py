@@ -26,5 +26,6 @@ class AdComposingApiRequestHandler(RequestHandlerBase):
             return {"Message": "请传递正确的json数据", "Code": 0, "Succeed": False, 'V': 1.0}
 
     def taskQueue(self, data):
+        print("taskQueue_data:"+ str(data))
         advertisingRelease = AdvertisingRelease()
         advertisingRelease.getAdInfo(data)

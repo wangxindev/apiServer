@@ -15,11 +15,8 @@
         <node name="account_id" type="string" default="未定"/>
         <node name="status" type="string" default="PAUSED"/>
         <node name="dc_id" type="string" default="未定"/>
-        <node name="campaign_name"
-              importPackageName='businessModule.business.adInfoComposing.getData.create_campaign_name'
-              func="create_campaign_name"
-              type="string" />
         <node name="objective" type="string" default="CONVERSIONS"/>
+
     </module>
 
     <module name="adset">
@@ -31,7 +28,6 @@
         <node name="attribution_window_days" enable="on" type="int" default="7"/>
         <node name="status" enable="on" type="string" default="ACTIVE"/>
         <node name="attribution_spec" enable="on" type="array" default="[ { ' event_type': 'CLICK_THROUGH', 'window_days': 7 } ]"/>
-        <node name="adsetName" enable="on" type="string" default="adsetName"/>
 
         <node name="bid_amount" enable="off" type="int" default="100"/>
         <node name="lifetime_budget" enable="off" type="int" default="10000"/>
@@ -43,7 +39,6 @@
     </module>
 
     <module name="ad">
-        <node name="ad_name" enable="on" type="string" default="adName"/>
         <node name="status" enable="on" type="string" default="ACTIVE"/>
         <node name="optimization_goal" enable="on" type="string" default="OFFSITE_CONVERSIONS"/>
         <node name="type" enable="on" type="string" default="slideshow"/>
@@ -53,6 +48,15 @@
         <node name="slideshow_aspect_radio" enable="on" type="string" default="original"/>
         <node name="slideshow_duration" enable="on" type="int" default="1"/>
         <node name="slideshow_transition" enable="on" type="string" default="none"/>
+    </module>
+
+    <module name="name">
+        <node name="ad_name" enable="on" type="string" default="adName"/>
+        <node name="adset_name" enable="on" type="string" default="adsetName"/>
+        <node name="campaign_name"
+              importPackageName='businessModule.business.adInfoComposing.getData.create_campaign_name'
+              func="create_campaign_name"
+              type="string" />
     </module>
 
 </xml>

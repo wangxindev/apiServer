@@ -6,5 +6,6 @@
         <node alias="targeting"/>
         <node alias="ad"/>
         <node alias="creative"/>
+        <node alias="name"/>
     </execute>
 </xml>
