@@ -51,8 +51,12 @@
     </module>
 
     <module name="name">
-        <node name="ad_name" enable="on" type="string" default="adName"/>
-        <node name="adset_name" enable="on" type="string" default="adsetName"/>
+        <node name="ad_name" enable="on" type="string" default="adName"
+              importPackageName='businessModule.business.adInfoComposing.getData.create_ad_name'
+              func="create_ad_name" />
+        <node name="adset_name" enable="on" type="string" default="adsetName"
+              importPackageName='businessModule.business.adInfoComposing.getData.create_adset_name'
+              func="create_adset_name" />
         <node name="campaign_name"
               importPackageName='businessModule.business.adInfoComposing.getData.create_campaign_name'
               func="create_campaign_name"

@@ -1,4 +1,5 @@
 
+import time
 
 class AdObj(object):
     def init(self, data):
@@ -9,6 +10,9 @@ class AdObj(object):
 
     def show(self):
         print(self.data)
+
+class OtherInfo(AdObj):
+    pass
 
 class Campaign(AdObj):
     pass
@@ -159,35 +163,130 @@ class Creative(AdObj):
         # return [self.data['creative']['creative']]
 
 class Name(AdObj):
-    pass
-    # def assemble(self):
-    #     pass
+
+    def __init__(self):
+        self.__operator='' #操作人
+        self.__categoryCode ='' #类别代码
+        self.__Level_3_classification_code = '' #3级分类代码
+        self.__sku = '' #sku
+        self.__date = '' #日期
+        self.__price = '' #最终售价
+        self.__Audience_positioning = '' #受众定位
+        self.__countries = '' #国家
+        self.__Audience_positioning_named = '' #受众定位命名
+        self.__Put_position = '' #投放位置
+        self.__set_date = '' #建立日期
+        self.__Advertising = ''#广告形式
+
+        self.__countries_key_value = {
+            'south_america':'soa',
+            'north_america': 'noa',
+            'central_america': 'cea',
+            'nafta': 'nafta',
+            'eea': 'eea',
+            'afta':'afta',
+            'cisfta': 'cisfta',
+            'mercosur': 'mer',
+            'android_free_store': 'afsc',
+            'android_paid_store': 'apsc',
+            'itunes_app_store': 'itune',
+            'apec': 'apec',
+            'europe': 'euro',
+        }
+
+    #Campaign name：操作人-类别代码-三级分类代码-sku-日期-价格
+    def getCompaignName(self, adInfo):
+        self.__operator = 'ai'
+        self.__categoryCode = '接口获取'
+        self.__Level_3_classification_code = '接口获取'
+        self.__sku = adInfo['key'][3:]
+        self.__date = time.strftime('%m%d', time.localtime(time.time()))
+        self.__price = '需要接口支持'
+
+        return self.__operator + "-" + self.__categoryCode + "-" + self.__Level_3_classification_code \
+            + "-" + self.__sku + "-" + self.__date + "-$" + self.__price
+
+
+    #adset name：受众定位 + 类别代码 - sku - 国家 - 受众定位命名 - 投放位置 - 建立日期
+    def getAdSetName(self,adset_targeting):
+        #
+        # {'flexible_spec': [{'interests': [{'id': '6003002193982', 'name': 'Amazon.com'},
+        #                                   {'id': '6003319307848', 'name': 'EBay'},
+        #                                   {'id': '6011406542962', 'name': 'eBay Global'},
+        #                                   {'id': '6011604327964', 'name': 'eBay  Fashion'},
+        #                                   {'id': '6003257148486', 'name': 'Alibaba.com'}]}],
+        #  'genders': [2],
+        #  'facebook_positions': ['feed', 'right_hand_column', 'instant_article'], 'age_min': '35', 'interest_tag': 'web',
+        #  'publisher_platforms': ['facebook', 'instagram', 'audience_network'],
+        #  'device_platforms': ['mobile', 'desktop'],
+        #  'geo_locations': {'countries': [], 'country_groups': ['apec'], 'regions': []},
+        #  'instagram_positions': ['stream'], 'age_max': '64'}
+
+        self.__Audience_positioning = 'i'
+        country_groups = adset_targeting['geo_locations']['country_groups']
+        countries = adset_targeting['geo_locations']['countries']
+        self.__countries = ''
+        if country_groups != []:
+            for country in country_groups:
+                try:
+                    self.__countries += self.__countries_key_value[country]
+                except:
+                    NameError("国家映射不存在")
+        elif countries != []:
+            for countrie in countries:
+                self.__countries += countrie
+        else:
+            raise NameError("国家不存在")
+
+        self.__Audience_positioning_named = adset_targeting['interest_tag']
+        self.__Put_position = 'auto'
+        self.__set_date = self.__date
+        return  self.__Audience_positioning + self.__categoryCode \
+            + "-" + self.__sku + "-" + self.__countries + "-" + self.__Audience_positioning_named \
+            + "-" + self.__Put_position + "-" + self.__set_date
+
+
+    #ad name：ad set name - 投放广告形式（其中需去除adset name内的日期）
+    def getAdName(self, ad_info):
+        self.__Advertising = ad_info['type']
+        return self.__Audience_positioning + self.__categoryCode \
+               + "-" + self.__sku + "-" + self.__countries + "-" + self.__Audience_positioning_named \
+               + "-" + self.__Put_position + "-" + self.__Advertising
 
 
 
 class AdvertisingRelease(object):
     def __init__(self):
+        print("__init__ start")
         self.__campaign = Campaign()
         self.__adSet = AdSet()
         self.__targeting = Targeting()
         self.__ad = Ad()
         self.__creative = Creative()
         self.__name = Name()
+        self.__otherInfo = OtherInfo()
+        print("__init__ end")
+
 
     def getAdInfo(self, adInfo):
+        print("get ad info start")
         self.__campaign.init(adInfo['campaign'])
         self.__adSet.init(adInfo['adset'])
         self.__targeting.init(adInfo['targeting'])
         self.__ad.init(adInfo['ad'])
         self.__creative.init(adInfo['creative'])
         self.__name.init(adInfo['name'])
+        print("other start")
+        self.__otherInfo.init(adInfo['otherInfo'])
+        print("other end")
 
         self.assembleAd()
+        print("get ad info end")
 
     def assembleAd(self):
 
         assemble_ad = self.__campaign.assemble()
-        assemble_ad['campaign_name'] = self.__name.data['campaign_name']
+        assemble_ad['campaign_name'] = self.__name.getCompaignName(self.__otherInfo.assemble())
         assemble_ad['adset'] = []
         adset_adset = self.__adSet.assemble()
         adset_Targeting_array = self.__targeting.assemble()
@@ -195,7 +294,7 @@ class AdvertisingRelease(object):
             adset_iter = adset_adset
             assemble_ad['adset'].append(adset_iter)
             adset_iter["targeting"] = adset_targeting
-            adset_iter['name'] = self.__name.data['adset_name']
+            adset_iter['name'] = self.__name.getAdSetName(adset_targeting)
             adset_iter['ads']=[]
             creative_array = self.__creative.assemble()
             creative_image_link_array = []
@@ -210,7 +309,7 @@ class AdvertisingRelease(object):
                 ad_tmp['creative']['slideshow_duration'] = ad['slideshow_duration']
                 ad_tmp['creative']['slideshow_transition'] = ad['slideshow_transition']
                 creative_image_link_array.append(creative['see_more_link'])
-                ad_tmp['ad_name'] = self.__name.data['ad_name']
+                ad_tmp['ad_name'] = self.__name.getAdName(ad)
                 ad_tmp['status'] = ad['status']
 
         print(self.sendAd(assemble_ad))

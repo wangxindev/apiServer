@@ -66,6 +66,8 @@ def parseXmlAndGetAdInfo(sku, domain, userData={}):
                 print(nodeChild.attrib)
                 b, error = parseNode(nodeChild, adMap, dataCenter)
     if b:
+        adInfo = adMap.getAdInfo()
+        adInfo['otherInfo'] = dataCenter.getMapData()
         return b, adMap.getAdInfo()
     else:
         return b , error
